@@ -9,12 +9,20 @@ export const getMeny = query({
 });
 
 export const add = mutation({
+
   args: {},
   handler: async (ctx) => {
+
     const identity = await ctx.auth.getUserIdentity();
     if (!identity) {
       throw new Error("Unauthorized");
     }
+
+    const orgId = identity.orgId as string
+    if(!orgId) {
+      throw new Error("Missing Organization");
+    }
+    
     const userId = await ctx.db.insert("users", { name: "John Doe" });
     return userId;
   },
